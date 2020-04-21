@@ -34,3 +34,5 @@ api_spec_v1.json
 api_spec_v2.json
 
 django.log
+venv/
+/venv/
