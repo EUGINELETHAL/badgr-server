@@ -543,6 +543,7 @@ class UserEmailTests(BadgrTestCase):
         self.assertEqual(len(mail.outbox), 0)
 
         # successfully send recovery email
+        """Redirect user to forgot-password page e.g 'http://localhost:4200/forgot-password/'"""
         response = self.client.post('/v1/user/forgot-password', {
             'email': self.first_user_email
         })

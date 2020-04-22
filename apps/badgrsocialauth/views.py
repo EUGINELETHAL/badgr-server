@@ -74,6 +74,10 @@ class BadgrSocialLogin(RedirectView):
 
 class BadgrSocialLoginCancel(RedirectView):
     def get_redirect_url(self):
+        """
+        The url to  redirect user after unsucessful login attempt
+        e.g 'http://localhost:4200/login'
+        """
         badgr_app = BadgrApp.objects.get_current(self.request)
         if badgr_app is not None:
             return set_url_query_params(badgr_app.ui_login_redirect)
@@ -81,6 +85,10 @@ class BadgrSocialLoginCancel(RedirectView):
 
 class BadgrSocialEmailExists(RedirectView):
     def get_redirect_url(self):
+        """
+        The url to  redirect user after unsucessful signup i.e if 
+        email already exists e.g ui_signup_failure_redirect='http://localhost:4200/signup'
+        """
         badgr_app = BadgrApp.objects.get_current(self.request)
         if badgr_app is not None:
             verification_email = self.request.session.get('verification_email', '')
@@ -95,6 +103,10 @@ class BadgrSocialEmailExists(RedirectView):
 
 class BadgrSocialAccountVerifyEmail(RedirectView):
     def get_redirect_url(self):
+        """
+        The url to  redirect user after sucessfully signing up
+         e.g 'http://localhost:4200/signup/success/'
+        """
         badgr_app = BadgrApp.objects.get_current(self.request)
         verification_email = get_session_verification_email(self.request)
 
@@ -231,12 +243,17 @@ def auto_provision(request, email, first_name, last_name, badgr_app, config, idp
             return login(new_account(email))
         Saml2Account.objects.create(config=config, user=existing_email.user, uuid=email)
         # Email exists and is already verified
+
         url = set_url_query_params(
             badgr_app.ui_signup_failure_redirect,
             authError='An account already exists with provided email address',
             email=str(base64.urlsafe_b64encode(email.encode('utf-8')), 'utf'),
             socialAuthSlug=idp_name
         )
+        """
+        The url to  redirect user after unsucessful signup i.e if 
+        email already exists e.g ui_signup_failure_redirect='http://localhost:4200/signup'
+        """
         return redirect(url)
     except CachedEmailAddress.DoesNotExist:
         # Email does not exist, auto-provision account and log in

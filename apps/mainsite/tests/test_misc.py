@@ -128,6 +128,10 @@ class TestCacheSettings(TransactionTestCase):
 )
 class TestSignup(BadgrTestCase):
     def test_user_signup_email_confirmation_redirect(self):
+        """
+        Test the  URL to return to after successful e-mail 
+        confirmation e.g http://localhost:4200/login/.
+        """
         from django.conf import settings
         http_origin = getattr(settings, 'HTTP_ORIGIN')
         badgr_app = BadgrApp(

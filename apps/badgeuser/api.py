@@ -200,6 +200,10 @@ class BadgeUserForgotPassword(BaseUserRecoveryView):
     v2_serializer_class = BaseSerializerV2
 
     def get(self, request, *args, **kwargs):
+        """
+        Redirects user to forgot-password page 
+        e.g 'http://localhost:4200/forgot-password/'
+        """
         badgr_app = None
         badgrapp_id = self.request.GET.get('a')
         if badgrapp_id:
@@ -209,7 +213,6 @@ class BadgeUserForgotPassword(BaseUserRecoveryView):
                 pass
         if badgr_app is None:
             badgr_app = BadgrApp.objects.get_current(request)
-
         redirect_url = badgr_app.forgot_password_redirect
         token = request.GET.get('token', '')
         tokenized_url = "{}{}".format(redirect_url, token)
@@ -453,10 +456,12 @@ class BadgeUserEmailConfirm(BaseUserRecoveryView):
             user,
             application=badgrapp.oauth_application if badgrapp.oauth_application_id else None,
             scope='rw:backpack rw:profile rw:issuer')
-
         redirect_url = get_adapter().get_email_confirmation_redirect_url(
             request, badgr_app=badgrapp)
-
+        """ 
+        The URL to return to after successful e-mail confirmation
+        e.g http://localhost:4200/login/
+        """    
         if badgrapp.use_auth_code_exchange:
             authcode = authcode_for_accesstoken(accesstoken)
             redirect_url = set_url_query_params(redirect_url, authCode=authcode)
@@ -470,6 +475,10 @@ class BadgeUserAccountConfirm(RedirectView):
     badgrapp = None
 
     def error_redirect_url(self):
+        """ 
+        Redirects user to login page e.g http://localhost:4200/login/
+        after unsucessful email confirmation
+        """
         if self.badgrapp is None:
             self.badgrapp = BadgrApp.objects.get_by_id_or_default()
 
@@ -479,6 +488,10 @@ class BadgeUserAccountConfirm(RedirectView):
         )
 
     def get_redirect_url(self, *args, **kwargs):
+        """ 
+        The URL to return to after successful
+        e-mail confirmation e.g `http://localhost:4200/login/`
+        """
         authcode = kwargs.get('authcode', None)
         if not authcode:
             return self.error_redirect_url()
@@ -509,7 +522,6 @@ class BadgeUserAccountConfirm(RedirectView):
         if user_info.get('plaintext_password'):
             user.set_password(user_info['plaintext_password'])
         user.save()
-
         redirect_url = urllib.parse.urljoin(
             self.badgrapp.email_confirmation_redirect.rstrip('/') + '/',
             urllib.parse.quote(user.first_name.encode('utf8'))

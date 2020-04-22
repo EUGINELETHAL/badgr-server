@@ -18,6 +18,10 @@ from mainsite.models import BadgrApp
 class BadgrSocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def authentication_error(self, request, provider_id, error=None, exception=None, extra_context=None):
+        """ 
+        Redirects user to login page e.g http://localhost:4200/login/
+        after authentication error
+        """
         logging.getLogger(__name__).info(
             'social login authentication error: %s' % {
                 'error': error,
@@ -79,8 +83,12 @@ class BadgrSocialAccountAdapter(DefaultSocialAccountAdapter):
                 request.user = accesstoken.user
                 if sociallogin.is_existing and accesstoken.user != sociallogin.user:
                     badgr_app = BadgrApp.objects.get_current(self.request)
+                    """ 
+                    URL to redirect user  after successfully
+                    connecting a social account. e.g 'http://localhost:4200/profile/' 
+                    """    
                     redirect_url = "{url}?authError={message}".format(
-                        url=badgr_app.ui_connect_success_redirect,
+                        url=badgr_app.ui_connect_success_redirect
                         message=urllib.parse.quote("Could not add social login. This account is already associated with a user."))
                     raise ImmediateHttpResponse(HttpResponseRedirect(redirect_to=redirect_url))
 

@@ -156,6 +156,9 @@ class BadgrApp(CreatedUpdatedBy, CreatedUpdatedAt, IsActive, cachemodel.CacheMod
         return self.cors
 
     def get_path(self, path='/', use_https=None):
+        '''
+        Redirects to signup page
+        '''
         if use_https is None:
             use_https = self.signup_redirect.startswith('https')
         scheme = 'https://' if use_https else 'http://'

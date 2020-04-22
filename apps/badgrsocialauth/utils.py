@@ -46,6 +46,10 @@ def get_verified_user(auth_token):
 
 
 def redirect_to_frontend_error_toast(request, message):
+   """
+    Redirects to login page e.g 'http://localhost:4200/login/
+    after authentication error
+    """
     badgr_app = BadgrApp.objects.get_current(request)
     redirect_url = "{url}?authError={message}".format(
         url=badgr_app.ui_login_redirect,

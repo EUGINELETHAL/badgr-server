@@ -64,6 +64,9 @@ def email_unsubscribe_response(request, message, error=False):
     badgr_app = BadgrApp.objects.get_by_id_or_default(badgr_app_pk)
 
     query_param = 'infoMessage' if error else 'authError'
+    """
+    Redirects to login page e.g 'http://localhost:4200/login/'
+    """
     redirect_url = "{url}?{query_param}={message}".format(
         url=badgr_app.ui_login_redirect,
         query_param=query_param,
@@ -171,6 +174,9 @@ class SitewideActionFormView(FormView):
 
 
 class RedirectToUiLogin(RedirectView):
+    """
+    Redirects to login page e.g 'http://localhost:4200/login/'
+    """
     def get_redirect_url(self, *args, **kwargs):
         badgrapp = BadgrApp.objects.get_current()
         return badgrapp.ui_login_redirect if badgrapp.ui_login_redirect is not None else badgrapp.email_confirmation_redirect

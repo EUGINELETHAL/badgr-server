@@ -39,7 +39,7 @@ class Command(BaseCommand):
             ApplicationInfo.objects.create(allowed_scopes="rw:profile rw:issuer rw:backpack", application=a)
             TermsVersion.objects.create(is_active=True, version="1", short_description="This is a summary of our terms of service.")
             BadgrApp.objects.create( name="dev", cors="localhost", email_confirmation_redirect=variables['fronturl']+"/login", 
-                signup_redirect=variables['fronturl']+"/signup", 
+                =variables['fronturl']+"/signup", 
                 forgot_password_redirect=variables['fronturl']+"/forgot-password/", 
                 ui_login_redirect=variables['fronturl']+"/login/", 
                 ui_signup_success_redirect=variables['fronturl']+"/signup/success/", 
