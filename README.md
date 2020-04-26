@@ -106,7 +106,7 @@ If your [badgr-ui](https://github.com/concentricsky/badgr-ui) is running on http
 * CORS: ensure this setting matches the domain on which you are running badgr-ui, including the port if other than the standard HTTP or HTTPS ports. `localhost:4000`
 * Signup redirect: `http://localhost:4000/signup/`
 * Email confirmation redirect: `http://localhost:4000/auth/login/`
-* Forgot password redirect: `http://localhost:4000/change-password/`
+* Forgot password redirect: `http://localhost:4000/forgot-password/`
 * UI login redirect: `http://localhost:4000/auth/login/`
 * UI signup success redirect: `http://localhost:4000/signup/success/`
 * UI connect success redirect: `http://localhost:4000/profile/`
